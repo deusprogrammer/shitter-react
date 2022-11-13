@@ -1,5 +1,8 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import {useAtom} from 'jotai';
+
+import { profileAtom } from '../components/Profile.atom';
 
 const EMPTY_SHIT = {
     text: ""
@@ -8,6 +11,7 @@ const EMPTY_SHIT = {
 let ShitFeed = () => {
     const [shits, setShits] = useState([]);
     const [newShit, setNewShit] = useState(EMPTY_SHIT);
+    const [loggedInProfile, setLoggedInProfile] = useAtom(profileAtom);
 
     const retrieveShits = async () => {
         let {data: shits} = await axios.get("https://deusprogrammer.com/api/shitter/shits");
@@ -37,10 +41,13 @@ let ShitFeed = () => {
 
     return (
         <div id="container">
-            <div className="new-shit">
-                <textarea type="text" placeholder="Take a shit." value={newShit.text} onChange={({target: {value}}) => {updateNewShit("text", value)}} />
-                <button onClick={createShit}>Create Shit</button>
-            </div>
+            {loggedInProfile ?
+                <div className="new-shit">
+                    <textarea type="text" placeholder="Take a shit." value={newShit.text} onChange={({target: {value}}) => {updateNewShit("text", value)}} />
+                    <button onClick={createShit}>Create Shit</button>
+                </div> :
+                null
+            }
             <div className="shits">
                 { shits.map(({id, username, text, date}) => {
                     return (

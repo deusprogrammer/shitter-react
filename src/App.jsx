@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'; 
 import {BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import {useAtom} from 'jotai';
 
+import { profileAtom } from './components/Profile.atom';
 import ShitFeed from './routes/ShitFeed';
 import Dev from './devComponents/Dev';
 
 import './App.css';
 
 let RoutePage = () => {
-    const [loggedInUserProfile, setLoggedInUserProfile] = useState(null);
+    const [loggedInUserProfile, setLoggedInUserProfile] = useAtom(profileAtom);
     const navigate = useNavigate();
     
     const getUserProfile = async () => {
